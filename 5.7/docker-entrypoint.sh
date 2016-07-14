@@ -93,6 +93,10 @@ if [ "$1" = 'mysqld' ]; then
 				ALTER USER 'root'@'%' PASSWORD EXPIRE;
 			EOSQL
 		fi
+		
+		echo "import stored db"
+		${mysql[@]} < /db/talentreef.sql
+
 		if ! kill -s TERM "$pid" || ! wait "$pid"; then
 			echo >&2 'MySQL init process failed.'
 			exit 1
@@ -104,7 +108,8 @@ if [ "$1" = 'mysqld' ]; then
 	fi
 
 	chown -R mysql:mysql "$DATADIR"
+	
 fi
 
-exec "$@"
 
+exec "$@"
