@@ -89,6 +89,13 @@ if [ "$1" = 'mysqld' ]; then
 			echo
 		done
 
+		# if a sql dump has been mounted into /db then import it
+		dbfile=$(ls /db)
+		if [ -n "$dbfile" ]; then
+			echo "importing $dbfile"
+			${mysql[@]} < /db/$dbfile
+		fi
+
 		if ! kill -s TERM "$pid" || ! wait "$pid"; then
 			echo >&2 'MySQL init process failed.'
 			exit 1
