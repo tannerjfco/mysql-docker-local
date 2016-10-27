@@ -16,7 +16,7 @@ fi
 
 if [ "$1" = 'mysqld' ]; then
 	# Get config
-	DATADIR="$("$@" --verbose --help --log-bin-index=/tmp/tmp.index 2>/dev/null | awk '$1 == "datadir" { print $2; exit }')"
+	DATADIR="$("$@" --verbose --help 2>/dev/null | awk '$1 == "datadir" { print $2; exit }')"
 
 	if [ ! -d "$DATADIR/mysql" ]; then
 		if [ -z "$MYSQL_ROOT_PASSWORD" -a -z "$MYSQL_ALLOW_EMPTY_PASSWORD" -a -z "$MYSQL_RANDOM_ROOT_PASSWORD" ]; then
@@ -31,9 +31,9 @@ if [ "$1" = 'mysqld' ]; then
 		mkdir -p "$DATADIR"
 		chown -R mysql:mysql "$DATADIR"
 
-		echo 'Initializing database'
-		"$@" --initialize-insecure=on
-		echo 'Database initialized'
+		echo 'Running mysql_install_db'
+		mysql_install_db --user=mysql --datadir="$DATADIR" --rpm --keep-my-cnf
+		echo 'Finished mysql_install_db'
 
 		"$@" --skip-networking &
 		pid="$!"
@@ -52,8 +52,9 @@ if [ "$1" = 'mysqld' ]; then
 			exit 1
 		fi
 
-		mysql_tzinfo_to_sql /usr/share/zoneinfo | "${mysql[@]}" mysql
-		
+		# sed is for https://bugs.mysql.com/bug.php?id=20545
+		mysql_tzinfo_to_sql /usr/share/zoneinfo | sed 's/Local time zone must be set--see zic manual page/FCTY/' | "${mysql[@]}" mysql
+
 		if [ ! -z "$MYSQL_RANDOM_ROOT_PASSWORD" ]; then
 			MYSQL_ROOT_PASSWORD="$(pwmake 128)"
 			echo "GENERATED ROOT PASSWORD: $MYSQL_ROOT_PASSWORD"
@@ -86,6 +87,7 @@ if [ "$1" = 'mysqld' ]; then
 
 			echo 'FLUSH PRIVILEGES ;' | "${mysql[@]}"
 		fi
+
 		echo
 		for f in /docker-entrypoint-initdb.d/*; do
 			case "$f" in
@@ -101,7 +103,6 @@ if [ "$1" = 'mysqld' ]; then
 				ALTER USER 'root'@'%' PASSWORD EXPIRE;
 			EOSQL
 		fi
-
 		# if a sql dump has been mounted into /db then import it
 		dbfile="data.sql"
 		if [ -n "$dbfile" ]; then
