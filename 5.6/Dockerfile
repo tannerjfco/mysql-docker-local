@@ -15,7 +15,7 @@ RUN mkdir /docker-entrypoint-initdb.d
 
 VOLUME /var/lib/mysql
 
-COPY docker-entrypoint.sh /entrypoint.sh
+ADD files /
 ENTRYPOINT ["/entrypoint.sh"]
 
 EXPOSE 3306
