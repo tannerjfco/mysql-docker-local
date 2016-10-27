@@ -98,11 +98,20 @@ if [ "$1" = 'mysqld' ]; then
 		done
 
 		# if a sql dump has been mounted into /db then import it
-		dbfile=$(ls /db)
+		dbfile="data.sql"
 		if [ -n "$dbfile" ]; then
 			echo "importing $dbfile"
 			${mysql[@]} < /db/$dbfile
 		fi
+
+		# if a drud.yaml exists try to run its pre-start-db task set
+		if [ -f /db/drud.yaml ]; then
+			if grep -q "pre-start-db" /db/drud.yaml; then
+				echo "running pre-start-db hook"
+				dcfg run pre-start-db --config /db/drud.yaml
+			fi
+		fi
+
 
 		if ! kill -s TERM "$pid" || ! wait "$pid"; then
 			echo >&2 'MySQL init process failed.'
