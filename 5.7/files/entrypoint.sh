@@ -28,11 +28,12 @@ if [ "$1" = 'mysqld' ]; then
 		if [ -f "$MYSQL_ROOT_PASSWORD" ]; then
 			MYSQL_ROOT_PASSWORD="$(cat $MYSQL_ROOT_PASSWORD)"
 		fi
+		rm -rf "$DATADIR"
 		mkdir -p "$DATADIR"
 		chown -R mysql:mysql "$DATADIR"
 
 		echo 'Initializing database'
-		"$@" --initialize-insecure=on
+		$"$@" --initialize-insecure=on
 		echo 'Database initialized'
 
 		"$@" --skip-networking &
@@ -53,7 +54,7 @@ if [ "$1" = 'mysqld' ]; then
 		fi
 
 		mysql_tzinfo_to_sql /usr/share/zoneinfo | "${mysql[@]}" mysql
-		
+
 		if [ ! -z "$MYSQL_RANDOM_ROOT_PASSWORD" ]; then
 			MYSQL_ROOT_PASSWORD="$(pwmake 128)"
 			echo "GENERATED ROOT PASSWORD: $MYSQL_ROOT_PASSWORD"
@@ -128,7 +129,7 @@ if [ "$1" = 'mysqld' ]; then
 	fi
 
 	chown -R mysql:mysql "$DATADIR"
-	
+
 fi
 
 

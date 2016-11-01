@@ -9,13 +9,13 @@ ENV MYSQL_MAX_ALLOWED_PACKET 16m
 RUN rpmkeys --import http://repo.mysql.com/RPM-GPG-KEY-mysql \
   && yum install -y $PACKAGE_URL \
   && yum install -y libpwquality \
-  && rm -rf /var/cache/yum/*
-  
-RUN mkdir /docker-entrypoint-initdb.d
+  && rm -rf /var/cache/yum/* \
+  && rm -rf /var/lib/mysql \
+  && mkdir -p /var/lib/mysql
 
-VOLUME /var/lib/mysql
-
+RUN mkdir /docker-entrypoint-initdb.data
 ADD files /
+
 ENTRYPOINT ["/entrypoint.sh"]
 
 EXPOSE 3306 33060
