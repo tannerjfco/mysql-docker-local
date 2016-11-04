@@ -15,7 +15,7 @@ RUN rpmkeys --import http://repo.mysql.com/RPM-GPG-KEY-mysql \
 
 RUN mkdir /docker-entrypoint-initdb.data
 ADD files /
-
+VOLUME /var/lib/mysql
 ENTRYPOINT ["/entrypoint.sh"]
 
 EXPOSE 3306 33060
