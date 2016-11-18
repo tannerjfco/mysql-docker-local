@@ -28,8 +28,6 @@ if [ "$1" = 'mysqld' ]; then
 		if [ -f "$MYSQL_ROOT_PASSWORD" ]; then
 			MYSQL_ROOT_PASSWORD="$(cat $MYSQL_ROOT_PASSWORD)"
 		fi
-		rm -rf "$DATADIR"
-		mkdir -p "$DATADIR"
 		chown -R mysql:mysql "$DATADIR"
 
 		echo 'Initializing database'
