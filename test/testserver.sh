@@ -1,11 +1,12 @@
 #!/bin/bash
 
-VERSION="$1"
+IMAGE="$1"
+TAG="$2"
 SERVERSTART=0
 SERVERCONNECT=0
 SUCCESS=false
-echo "Starting image with MySQL version $VERSION"
-docker run -e MYSQL_ROOT_PASSWORD=rot --name=testserver -p 3306:3306 -d mysql/mysql-server:$VERSION
+echo "Starting image with MySQL image $IMAGE:$TAG"
+docker run -e MYSQL_ROOT_PASSWORD=rot --name=testserver -p 3306:3306 -d $IMAGE:$TAG
 RES=$?
 if [ ! $RES = 0 ]; then
 	echo "Server start failed with error code $RES"
@@ -16,7 +17,7 @@ echo "Connecting to server..."
 if [ $SERVERSTART ];
 then
 	for i in $(seq 30 -1 0); do
-		OUTPUT="$(mysql -uroot -prot -h127.0.0.1 -P3306 < 'test/sql_version.sql')"
+		OUTPUT="$(echo 'SHOW VARIABLES like \'version\';' | mysql -uroot -prot -h127.0.0.1 -P3306)"
 		RES=$?
 		if [ $RES -eq 0 ]; then
 			SERVERCONNECT=1

@@ -1,6 +1,8 @@
-FROM oraclelinux:latest
+FROM UPSTREAM_REPO
 
-ENV PACKAGE_URL https://repo.mysql.com/yum/mysql-5.7-community/docker/x86_64/mysql-community-server-minimal-5.7.13-1.el7.x86_64.rpm
+ARG MYSQL_PACKAGE_VERSION=5.7.13-1
+ENV MYSQL_PACKAGE_VERSION=$MYSQL_PACKAGE_VERSION
+ENV PACKAGE_URL https://repo.mysql.com/yum/mysql-5.7-community/docker/x86_64/mysql-community-server-minimal-$MYSQL_PACKAGE_VERSION.el7.x86_64.rpm
 ENV MYSQL_DATABASE data
 ENV MYSQL_ROOT_PASSWORD root
 ENV MYSQL_MAX_ALLOWED_PACKET 16m
