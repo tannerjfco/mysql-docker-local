@@ -31,9 +31,9 @@ if [ "$1" = 'mysqld' ]; then
 		mkdir -p "$DATADIR"
 		chown -R mysql:mysql "$DATADIR"
 
-		echo 'Initializing database'
-		"$@" --initialize-insecure=on
-		echo 'Database initialized'
+		echo 'Running mysql_install_db'
+		mysql_install_db --user=mysql --datadir="$DATADIR" --rpm
+		echo 'Finished mysql_install_db'
 
 		"$@" --skip-networking &
 		pid="$!"
@@ -103,10 +103,10 @@ if [ "$1" = 'mysqld' ]; then
 		fi
 
 		# if a sql dump has been mounted into /db then import it
-		dbfile="data.sql"
-		if [ -n "$dbfile" ]; then
+		dbfile="/db/data.sql"
+		if [ -f "$dbfile" ]; then
 			echo "importing $dbfile"
-			${mysql[@]} < /db/$dbfile
+			${mysql[@]} < $dbfile
 		fi
 
 		# if a drud.yaml exists try to run its pre-start-db task set

@@ -17,6 +17,8 @@ UPSTREAM_REPO ?= oraclelinux:7.3
 # Optional to docker build
 DOCKER_ARGS = --build-arg MYSQL_PACKAGE_VERSION=5.7.17-1
 
+MYSQL_VERSION = 5.7
+
 # VERSION can be set by
   # Default: git tag
   # make command line: make VERSION=0.9.0
@@ -39,3 +41,6 @@ include ../build-tools/makefile_components/base_container.mak
 include ../build-tools/makefile_components/base_push.mak
 #include build-tools/makefile_components/base_test_go.mak
 include ../build-tools/makefile_components/base_test_python.mak
+
+test: container
+	../test/testserver.sh $(DOCKER_REPO):$(VERSION) $(MYSQL_VERSION) && ../test/cleanup.sh $(DOCKER_REPO):$(VERSION)
