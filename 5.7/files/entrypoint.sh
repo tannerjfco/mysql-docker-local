@@ -102,10 +102,10 @@ if [ "$1" = 'mysqld' ]; then
 		fi
 
 		# if a sql dump has been mounted into /db then import it
-		dbfile="data.sql"
-		if [ -n "$dbfile" ]; then
+		dbfile="/db/data.sql"
+		if [ -f "$dbfile" ]; then
 			echo "importing $dbfile"
-			${mysql[@]} < /db/$dbfile
+			${mysql[@]} < $dbfile
 		fi
 
 		if ! kill -s TERM "$pid" || ! wait "$pid"; then
