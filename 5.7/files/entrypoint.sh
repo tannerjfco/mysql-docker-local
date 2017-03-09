@@ -101,13 +101,6 @@ if [ "$1" = 'mysqld' ]; then
 			EOSQL
 		fi
 
-		# if a sql dump has been mounted into /db then import it
-		dbfile="/db/data.sql"
-		if [ -f "$dbfile" ]; then
-			echo "importing $dbfile"
-			${mysql[@]} < $dbfile
-		fi
-
 		if ! kill -s TERM "$pid" || ! wait "$pid"; then
 			echo >&2 'MySQL init process failed.'
 			exit 1

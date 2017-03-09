@@ -17,6 +17,7 @@ RUN rpmkeys --import http://repo.mysql.com/RPM-GPG-KEY-mysql \
 
 RUN mkdir /docker-entrypoint-initdb.data
 ADD files /
+RUN chmod ugo+x /import.sh
 VOLUME /var/lib/mysql
 ENTRYPOINT ["/entrypoint.sh"]
 

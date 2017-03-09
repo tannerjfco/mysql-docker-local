@@ -4,7 +4,7 @@ PREFIX = drud/mysql-docker-local
 DIRECTORY = $(shell pwd)
 
 
-DIRS = 5.5 5.6 5.7
+DIRS = 5.7
 BASEDIR=./
 
 .PHONY: $(MAKECMDGOALS) $(DIRS) all build test clean container push
