@@ -14,5 +14,5 @@ all: $(DIRS)
 $(MAKECMDGOALS): $(DIRS)
 
 $(DIRS):
-	$(MAKE) -C $(addprefix $(BASEDIR),$@) $(MAKEFLAGS) $(MAKECMDGOALS)
+	$(MAKE) -C $(addprefix $(BASEDIR),$@) $(MAKECMDGOALS)
 
