@@ -112,7 +112,7 @@ if [ "$1" = 'mysqld' ]; then
 	fi
 
 	chown -R mysql:mysql "$DATADIR"
-
+	mv /root/mysqlclient.cnf /root/.my.cnf
 fi
 
 
