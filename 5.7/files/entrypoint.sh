@@ -112,6 +112,9 @@ if [ "$1" = 'mysqld' ]; then
 	fi
 
 	chown -R mysql:mysql "$DATADIR"
+
+	# This .my.cnf configuration prevents the initialization process from
+	# succeeding, so it is moved into place after initialization is complete.
 	mv /root/mysqlclient.cnf /root/.my.cnf
 fi
 
