@@ -25,4 +25,4 @@ ENTRYPOINT ["/entrypoint.sh"]
 
 EXPOSE 3306 33060
 CMD ["mysqld"]
-HEALTHCHECK CMD ["/healthcheck.sh"]
+HEALTHCHECK --interval=5s --retries=5 CMD ["/healthcheck.sh"]
