@@ -1,6 +1,6 @@
 
 TAG = $(shell git rev-parse --abbrev-ref HEAD | tr -d '\n')
-PREFIX = drud/mysql-docker-local
+PREFIX = drud/mysql-local
 DIRECTORY = $(shell pwd)
 
 

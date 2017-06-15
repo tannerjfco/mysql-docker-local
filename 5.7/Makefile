@@ -6,7 +6,7 @@
 # PKG := github.com/drud/repo_name
 
 # Docker repo for a push
-DOCKER_REPO ?= drud/mysql-docker-local-57
+DOCKER_REPO ?= drud/mysql-local-57
 
 # Upstream repo used in the Dockerfile
 UPSTREAM_REPO ?= oraclelinux:7.3
