@@ -2,7 +2,7 @@ version: 2
 executorType: machine
 stages:
   build:
-    workDir: ~/mysql-docker-local
+    workDir: ~/docker.mysql-local
     steps:
       - type: checkout
       - type: shell
